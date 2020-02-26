@@ -1,0 +1,46 @@
+
+//方法一：不论连标的长度是奇数还是偶数，链表的中间节点（奇数），或者链表的中间节点的第二个（偶数）都是中间节点
+class Solution {
+	//求取链表的长度
+    private int getLength(ListNode head) {
+        int len = 0;
+        for (ListNode cur = head; cur != null; cur = cur.next) {
+            len++;
+        }
+        
+        return len;
+    }
+	//返回链表的中间结点。如果有两个中间结点，则返回第二个中间结点。
+    public ListNode middleNode(ListNode head) {
+        int len = getLength(head);
+        int midLen = len / 2;
+        ListNode node = head;
+        for (int i = 0; i < midLen; i++) {
+            node = node.next;
+        }
+        
+        return node;
+    }
+}
+
+
+//方法二：
+//定义两个引用fast和slow，初值均等于head，fast走两步（走完第一步之后，记得判断fast是否为空，为空跳出，不为空继续下一步），slow走一步，当
+//fast为null时，slow刚好到达中间节点。
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        
+        while (fast != null) {
+            fast = fast.next;
+            if (fast == null) {
+                break;
+            }
+            slow = slow.next;
+            fast = fast.next;
+        }
+        
+        return slow;
+    }
+}
