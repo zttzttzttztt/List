@@ -1,0 +1,43 @@
+
+	//判断两个链表是否有公共节点
+	//先分别求出两个链表的长度lenA和lenB，定义两个引用longer=headA和shorter=headB
+	//定义一个引用diff=两个链表的长度差，
+	//让较长的longer先走diff步，然后两个链表一起开始走
+	//判断longer是否等于shorter，不等于则没有公共节点，否则有公共节点
+
+public class Solution {
+	//获取链表长度方法
+    private int getLength(ListNode head) {
+        int len = 0;
+        for (ListNode c = head; c != null; c = c.next) {
+            len++;
+        }
+        
+        return len;
+    }
+	
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        int lenA = getLength(headA);
+        int lenB = getLength(headB);
+        //获取链表长度，并求取长度差
+        ListNode longer = headA;
+        ListNode shorter = headB;
+        int diff = lenA - lenB;
+        if (lenA < lenB) {
+            longer = headB;
+            shorter = headA;
+            diff = lenB - lenA;
+        }
+        //让longer先走长度差步
+        for (int i = 0; i < diff; i++) {
+            longer = longer.next;
+        }
+        //判断是否右公共节点
+        while (longer != shorter) {
+            longer = longer.next;
+            shorter = shorter.next;
+        }
+        
+        return longer;
+    }
+}
