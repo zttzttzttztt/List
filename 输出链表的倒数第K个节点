@@ -1,0 +1,47 @@
+
+//先求出链表的长度，链表的倒数第k个即为正数第length-k，只要从链表的head开始找到并输出其length-k个节点即可
+//分情况即：length<k；length>k;length=k
+//方法一：
+public class Solution {
+	//求链表的长度
+    public ListNode FindKthToTail(ListNode head,int k) {              
+        int len = 0;
+        for (ListNode c = head; c != null; c = c.next) {
+            len++;
+        }
+        //length<k
+        if (len < k) {
+            return null;
+        }
+        //length>=k
+        int steps = len - k;
+        ListNode r = head;
+        for (int i = 0; i < steps; i++) {
+            r = r.next;
+        }
+        
+        return r;
+    }
+}
+//方法二：
+//front先走k-1步，在和bank一起往后走，这样front的bank之间相差k-1，当front为null时，bank正好指向倒数第k个
+public class Solution {
+    public ListNode FindKthToTail(ListNode head,int k) {
+        ListNode front = head;
+        ListNode back = head;
+        //让front先走k步
+        for (int i = 0; i < k; i++) {
+            if (front == null) {
+                return null;
+            }
+            front = front.next;
+        }
+        //让front和bank一起向后走，结束之后bank就正好时倒数第k个位置
+        while (front != null) {
+            back = back.next;
+            front = front.next;
+        }
+        
+        return back;
+    }
+}
