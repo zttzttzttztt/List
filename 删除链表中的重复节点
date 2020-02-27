@@ -1,0 +1,42 @@
+7. 在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。
+//创建三个引用，prev，p1，p2，prev用来做前驱，p1为连标的head，p2为链表的head.next，比较p1和p2是否相等，不想等的话，prev，p1，p2均往后走一步
+//如果相等p1，prev均保持不变，p2往后走一步，继续和p1判断，直到p2和p1不想等，结束循环，将prev.next=p2，p1=p2，p2=p2.next
+//直到p2=null，结束整个循环
+public class Solution {
+    public ListNode deleteDuplication(ListNode pHead)
+    {
+		if (pHead == null) {                          //判断链表是否为null
+			return null;
+		}
+		                                            //不为null，执行
+		
+		ListNode prev = null;
+        ListNode p1 = pHead;
+        ListNode p2 = pHead.next;
+        //判断p1，p2是否相等
+        while (p2 != null) {
+            if (p1.val != p2.val) {
+                prev = p1;
+                p1 = p2;
+                p2 = p2.next;
+            } else {                                                  //循环跳出后p2可能为null也可能不为空
+                while (p2 != null && p2.val == p1.val) {               //如果相等，p2继续往后走直到和p1不相等
+                    p2 = p2.next;
+                }
+                //如果链表的p1=head时就和p2相等，此时prev为null，直接prev.next = p2回报错，所以分情况讨论
+                if (prev == null) {
+                    pHead = p2;
+                } else {
+                    prev.next = p2;
+                }
+                p1 = p2;
+                if (p2 != null) {
+                    p2 = p2.next;
+                }
+            }
+        }
+            
+        return pHead;
+    }
+}
+
