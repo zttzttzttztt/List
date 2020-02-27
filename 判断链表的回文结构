@@ -1,0 +1,67 @@
+
+//找到中间的节点
+	//fast和slow都指向head，当fast向后走两步（fasy走完第一步时必须判断是否为空）时，slow向后走一步，这样一次往后，知道fast为null时，slow刚好是中间节点
+	//将链表中间的后半段逆置此时head=slow
+	//将逆置的后半段链表与原链表从头开始比较，如果有一个不相等，则不是回文链表，否则当逆置的后半段执行到null时都相等，则是回文
+public class PalindromeList {
+    public ListNode getMid(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        
+        while (fast != null) {
+            fast = fast.next;
+            if (fast == null) {
+                break;
+            }
+            fast = fast.next;
+            slow = slow.next;
+        }
+        
+        return slow;
+    }
+    //将链表中间的后半段逆置此时head=slow
+    public ListNode reverse(ListNode head) {
+        ListNode result = null;
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode next = cur.next;
+            
+            cur.next = result;
+            result = cur;
+            
+            cur = next;
+        }
+       /*while (cur != null) {
+            ListNode node = cur;
+            //注意这里，不可以这样写
+            node.next = result;
+            result = node;
+            
+            cur = cur.next;
+        } */
+        
+        return result;
+    }
+    //主方法
+	//将逆置的后半段链表与原链表从头开始比较，如果有一个不相等，则不是回文链表，否则当逆置的后半段执行到null时都相等，则是回文
+    public boolean chkPalindrome(ListNode A) {
+        ListNode mid = getMid(A);
+        ListNode h2 = reverse(mid);
+        ListNode n1 = A;
+        ListNode n2 = h2;
+        while (n1 != null && n2 != null) {
+            if (n1.val != n2.val) {
+                return false;
+            }
+            
+            n1 = n1.next;
+            n2 = n2.next;
+        }
+        
+        return true;
+    }
+}
+
+
+//方法二：
+//不算中间长度，直接逆置整个链表，从头到尾比较两个链表，判读其是否是回文结构
