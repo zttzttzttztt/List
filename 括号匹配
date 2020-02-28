@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+
+public class Solution {
+    public boolean isValid(String s) {
+        ArrayList<Character> stack = new ArrayList<>();
+//遍历字符串中的每个字符
+//如果是左括号就入栈
+//如果是有括号：1.如果栈是空的：返回不匹配（有括号多了）   2.else出栈，如果左右括号不匹配：返回不匹配  3.else继续循环
+//如果栈不为空：返回不匹配（左括号多余）
+//否则返回匹配
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+//左括号就入栈
+            switch (c) {
+                case '(':
+                case '[':
+                case '{':
+                    stack.add(c);
+                    break;
+					//如果是有括号
+                case ')':
+                case ']':
+                case '}': 
+				//如果栈是空的：返回不匹配（有括号多了）
+				{
+                    if (stack.isEmpty()) {
+                        return false;
+                    }
+					// 2.else出栈，如果左右括号不匹配：返回不匹配
+                    char left = stack.remove(stack.size() - 1);
+                    if (!((left == '(' && c == ')')
+                        || (left == '[' && c == ']')
+                        || (left == '{' && c == '}'))) {
+
+                        return false;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+//如果栈不为空：返回不匹配（左括号多余）否则返回匹配
+        if (stack.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
