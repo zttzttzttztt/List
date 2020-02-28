@@ -1,0 +1,37 @@
+
+//快慢指针，快的走两步，慢的走一步，（快的不可以比慢的多走超过一步）fast 遇到 null，表示不带环，返回 null， fast == slow，表示遇到相遇点了
+//找环的入口：  1.把环转化转为相交问题，2.一个引用从起点出发，一个引用从相遇点出发，一定会在环的入口点相遇
+//证明：  1.满引用走L+C     2.快引用走的距离L+C+（n+1）*R          3.快引用走的距离2*（L+C）
+              //2和3相等，可证
+//相遇点的距离到入口点的距离和起点到入口点的距离相等
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        // fast 遇到 null，表示不带环，返回 null
+        // fast == slow，表示遇到相遇点了
+        do {
+            if (fast == null) {
+                return null;
+            }
+            fast = fast.next;
+            if (fast == null) {
+                return null;
+            }
+            fast = fast.next;
+            slow = slow.next;
+        } while (fast != slow);
+        // 求相遇点
+        // 如果快的遇到 null，表示没有环，直接返回 null
+        // 相遇点出发 + 起点出发，最终相遇
+        ListNode p = head;              //记录起点
+        ListNode q = slow;           //记录相遇点
+        while (p != q) {
+            p = p.next;
+            q = q.next;
+        }
+        
+        return q;
+    }
+
+
