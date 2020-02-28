@@ -1,0 +1,193 @@
+
+
+//链表的头插
+//先判断链表是否为空，如果不为空则node.next=head，head.prev=node否则说明last和head均等于node，插完之后让size++
+    public void pushFront(int val) {
+        Node node = new Node(val);
+        node.next = head;
+        if (head != null) {
+            head.prev = node;
+        } else {
+            last = node;
+        }
+        head = node;
+
+        size++;
+    }
+
+/
+
+//先判断链表是否为空，为空则报错不能删，否则head=head.next再判断链表是否只有一个节点，如果只有一个节点删完之后last=null，
+//否则让head.prev=null，size--。
+
+    public void popFront() {
+        if (size <= 0) {
+            System.out.println("无法对空链表做删除");
+            return;
+        }
+
+        head = head.next;
+        if (head != null) {
+            head.prev = null;
+        } else {
+            last = null;
+        }
+        size--;
+    }
+//尾插
+//先判断last是否为null，为null则last和head均为null，否则last.next = node;node.prev = last;last = node;size++;
+    void pushBack(int val) {
+        Node node = new Node(val);
+        if (last == null) {
+            head = node;
+        } else {
+            last.next = node;
+        }
+        node.prev = last;
+        last = node;
+
+        size++;
+    }
+//尾删
+//先判断链表是否为null，为空报错无法删除，否则先让last.prev.next = null;last = last.prev;最后size--。
+    void popBack() {
+        if (size <= 0) {
+            System.out.println("无法对空链表做删除");
+            return;
+        }
+
+        if (last == head) {
+            head = last = null;
+        } else {
+            last.prev.next = null;
+            last = last.prev;
+        }
+
+        size--;
+    }
+	
+	
+//在下标为index的位置处插入一个节点
+//先判断下标是否有效，无效则报错，否则1.index==0，则为头插，2.如果index=size，则为尾插3.else中间插
+//中间插：  将下标为index的节点记为pos，先让node.prev = pos.prev;node.next = pos;再让node.prev.next = node;node.next.prev = node;最后size++
+    public void add(int index, int val) {
+        if (index < 0 || index > size) {
+            System.out.println("下标错误");
+            return;
+        }
+        if (index == 0) {
+            pushFront(val);
+        } else if (index == size) {
+            pushBack(val);
+        } else {                          //中间插
+            Node pos = getNode(index);       //获取下标为index处的节点
+            Node node = new Node(val);
+            node.prev = pos.prev;
+            node.next = pos;
+            node.prev.next = node;
+            node.next.prev = node;
+
+            size++;
+        }
+    }
+	
+	
+//删除下标为index处的节点
+//先判断链表是否为空，为空则无法删除，不为空再判断下标的合法性，不合法报错，
+//合法：1.index==0，头删  2.index=size，尾删  3.else中间删除  4.size--
+//中间删除： pos.prev.next = pos.next;pos.next.prev = pos.prev;
+    public void remove(int index) {
+        if (size <= 0) {
+            System.out.println("无法对空链表做删除");
+            return;
+        }
+
+        if (index < 0 || index >= size) {
+            System.out.println("下标错误");
+            return;
+        }
+
+        if (index == 0) {
+            popFront();
+        } else if (index == size - 1) {
+            popBack();
+        } else {               //中间删除
+            Node pos = getNode(index);        //获取下标为index处的节点
+            pos.prev.next = pos.next;
+            pos.next.prev = pos.prev;
+            size--;
+        }
+    }
+
+    // 代码的复用性
+	//获取下标为index处的节点
+    private Node getNode(int index) {
+        // 不需要校验 index 的合法性
+        // 因为使用者 add 和 remove 已经做过类似工作了
+        int backwardIndex = size - index - 1;             //从后往前的步数
+        Node pos;
+		 //判断从前往后获取快还是从后往前快
+        if (index <= backwardIndex) {        //从前往后快    
+            pos = head;
+            for (int i = 0; i < index; i++) {
+                pos = pos.next;
+            }
+        } else {
+            pos = last;
+            for (int i = 0; i < backwardIndex; i++) {
+                pos = pos.prev;
+            }
+        }
+
+        return pos;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public void reset() {
+        head = last = null;
+        size = 0;
+    }
+
+    public static void main(String[] args) {
+        MyLinkedList list = new MyLinkedList();
+        list.pushFront(1);
+        list.pushFront(2);
+        list.pushFront(3);
+        System.out.println("3 2 1");
+        list.popFront();
+        list.popFront();
+        list.popFront();
+        System.out.println("");
+        list.pushBack(10);
+        list.pushBack(20);
+        list.pushBack(30);
+        System.out.println("10 20 30");
+        list.popBack();
+        list.popBack();
+        list.popBack();
+        System.out.println("");
+        list.pushBack(1);
+        list.pushBack(2);
+        list.pushBack(3);
+        list.pushBack(4);
+        list.pushBack(5);
+        System.out.println("1 2 3 4 5");
+        list.add(1, 10);
+        System.out.println("1 10 2 3 4 5");
+        list.add(5, 20);
+        System.out.println("1 10 2 3 4 20 5");
+        list.remove(1);
+        System.out.println("1 2 3 4 20 5");
+        list.remove(4);
+        System.out.println("1 2 3 4 5");
+    }
+}
+
+
