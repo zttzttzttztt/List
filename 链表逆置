@@ -1,0 +1,29 @@
+public static Node reverse(Node head) {
+        // 遍历，把每个结点头插到新链表中
+
+        // 指向新链表的第一个结点
+        Node result = null;
+        Node cur = head;
+        while (cur != null) {
+            Node next = cur.next;
+            // 把 cur 头插到新链表中
+            cur.next = result;
+            result = cur;
+
+            // cur = cur.next;
+            cur = next;
+        }
+
+        return result;
+    }
+
+    public static Node reverse2(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        Node result = reverse2(head.next);
+        head.next.next = head;
+        head.next = null;
+        return result;
+    }
